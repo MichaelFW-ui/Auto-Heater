@@ -1,0 +1,26 @@
+Change Component Comment : Designator=X2 Old Comment=80M New Comment=32768Hz
+Added Member To Class: ClassName=Heater Member=Component R1 4.7k次
+Added Member To Class: ClassName=Heater Member=Component R2 1M次
+Added Member To Class: ClassName=Heater Member=Component R3 33次
+Added Member To Class: ClassName=Heater Member=Component R4 1k次
+Added Member To Class: ClassName=Heater Member=Component R5 1k次
+Added Member To Class: ClassName=Heater Member=Component R6 1次
+Added Member To Class: ClassName=Heater Member=Component R7 1次
+Added Member To Class: ClassName=Heater Member=Component R8 1k次
+Added Member To Class: ClassName=Heater Member=Component R9 130k次
+Added Member To Class: ClassName=Heater Member=Component R10 10k次
+Added Member To Class: ClassName=Heater Member=Component R11 1k次
+Added Member To Class: ClassName=Heater Member=Component R12 5.1k次
+Added Member To Class: ClassName=Heater Member=Component R13 20k次
+Added Member To Class: ClassName=Heater Member=Component R14 1k次
+Added Member To Class: ClassName=Heater Member=Component R15 10k次
+Added Member To Class: ClassName=Heater Member=Component R16 1k次
+Added Member To Class: ClassName=Heater Member=Component R17 1k次
+Added Member To Class: ClassName=Heater Member=Component R18 360次,2512
+Added Member To Class: ClassName=Heater Member=Component R19 10次
+Added Member To Class: ClassName=Heater Member=Component R20 39次,2512
+Added Member To Class: ClassName=Heater Member=Component R21 1k次
+Added Member To Class: ClassName=Heater Member=Component R22 100次
+Added Member To Class: ClassName=Heater Member=Component R23 360次,2512
+Added Member To Class: ClassName=Heater Member=Component R24 1k次
+Added Room: Name=Heater
