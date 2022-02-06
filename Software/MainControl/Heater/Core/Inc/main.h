@@ -58,9 +58,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define UART1_UpperClassControl 1
-#define VirtualPort_DebugOutput 1
 #define UART2_WEB 1
+#define SPI3_Flash 1
+#define VirtualPort_DebugOutput 1
+#define UART1_UpperClassControl 1
+#define SPI1_IPS 1
+#define ADC1_NTC 1
+#define IPS_CS_Pin GPIO_PIN_4
+#define IPS_CS_GPIO_Port GPIOA
+#define IPS_RES_Pin GPIO_PIN_0
+#define IPS_RES_GPIO_Port GPIOB
+#define IPS_DC_Pin GPIO_PIN_1
+#define IPS_DC_GPIO_Port GPIOB
+#define IPS_BLK_Pin GPIO_PIN_10
+#define IPS_BLK_GPIO_Port GPIOB
+#define EC11_SW_Pin GPIO_PIN_12
+#define EC11_SW_GPIO_Port GPIOB
+#define EC11_A_Pin GPIO_PIN_13
+#define EC11_A_GPIO_Port GPIOB
+#define EC11_C_Pin GPIO_PIN_14
+#define EC11_C_GPIO_Port GPIOB
+#define PWM_Heat_Pin GPIO_PIN_9
+#define PWM_Heat_GPIO_Port GPIOA
+#define Flash_Hold_Pin GPIO_PIN_15
+#define Flash_Hold_GPIO_Port GPIOA
+#define Flash_CS_Pin GPIO_PIN_7
+#define Flash_CS_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
