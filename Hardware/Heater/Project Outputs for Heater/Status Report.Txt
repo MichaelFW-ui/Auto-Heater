@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [Heater.PrjPcb]
+   Generated File[Heater-RoundHoles.TXT]
+   Generated File[Heater-SlotHoles.TXT]
+   Generated File[Heater.LDP]
+   Generated File[Heater.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 18:08:36 On 2022/2/21

@@ -23,6 +23,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
+#include <stdarg.h>
 
 /* USER CODE END INCLUDE */
 
@@ -32,6 +33,9 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+extern uint8_t get_data_flag;
+extern uint8_t buf[];
+extern uint32_t data_nums;
 
 /* USER CODE END PV */
 
@@ -264,6 +268,14 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+
+  if (!get_data_flag) data_nums = 0;
+  for (int i = 0; i < *Len; ++i) {
+    buf[i + data_nums] = *Buf++;
+  }
+  data_nums += *Len;
+  buf[data_nums] = '\0';
+  get_data_flag = 1;
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -318,6 +330,23 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
+/**
+ * @brief 该函数将极大增加Code大小。小心使用
+ * 
+ * @param fmt 
+ * @param ... 
+ */
+void usb_printf(const char *fmt, ...) {
+  va_list args;
+  uint32_t length = 0;
+  uint8_t buff[APP_TX_DATA_SIZE];
+
+  va_start(args, fmt);
+  length = vsnprintf((char *)buff, sizeof(buff), (char *)fmt, args);
+  va_end(args);
+  CDC_Transmit_FS(buff, length);
+}
+
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
 /**
@@ -327,5 +356,3 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 /**
   * @}
   */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
