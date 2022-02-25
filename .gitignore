@@ -65,4 +65,5 @@ dkms.conf
 build/*
 History/*
 Hardware/Heater/History/*
+Document/*
 
