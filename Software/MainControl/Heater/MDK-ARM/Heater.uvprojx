@@ -809,10 +809,17 @@
               <FileType>8</FileType>
               <FilePath>..\User\Src\process.cpp</FilePath>
             </File>
+            <File>
+              <FileName>externalflash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Src\externalflash.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>fontlib.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Src\fontlib.cpp</FilePath>
+            </File>
           </Files>
-        </Group>
-        <Group>
-          <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
           <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
@@ -3349,6 +3356,9 @@
               </FileOption>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>
     </Target>
