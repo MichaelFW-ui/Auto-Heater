@@ -11,6 +11,7 @@
 
 #include "lcd.h"
 #include "cmsis_os.h"
+#include "fontlib.h"
 
 lcd_st7735s hLCD;
 
@@ -42,6 +43,7 @@ void lcd_st7735s::WriteCommand(uint8_t command) {
   CS_Low();
   DC_Low();
   HAL_SPI_Transmit(this->spi, &command, 1, MAX_TIMEOUT_MS);
+  DC_High();
 }
 
 void lcd_st7735s::WriteData_8bits(uint8_t *bytes, uint8_t len) {
@@ -195,4 +197,29 @@ void lcd_st7735s::SetAddress(uint16_t x1, uint16_t y1, uint16_t x2,
     WriteCommand(0x2c);  //储存器写
   }
   // CS_High();
+}
+
+void lcd_st7735s::Fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
+                       uint16_t color) {
+  SetAddress(x1, y1, x2, y2);
+  for (auto i = y1; i <= y2; ++i) {
+    for (auto j = x1; j <= x2; ++j) {
+      WriteHalfWord(color);
+    }
+  }
+  CS_High();
+}
+
+void lcd_st7735s::PrintASCII(uint8_t ch, uint16_t x, uint16_t y, uint16_t color,
+                             uint16_t bg_color, FontSize size) {
+  FontLib_CharInfo_t ch_t = fontLib.GetFont_ASCII(ch, size);
+  if (!ch_t.font) return;
+  SetAddress(x, y, x + ch_t.width-1, y + ch_t.height-1);
+  uint8_t LocalSize = (ch_t.width - 1) / 8 + 1;
+  for (int i = 0; i < ch_t.height; ++i) {
+    for (int j = 0; j < ch_t.width; ++j) {
+      if ((ch_t.font)[i * LocalSize + j / 8] & (1 << (j % 8))) WriteHalfWord(color);
+      else WriteHalfWord(bg_color);
+    }
+  }
 }

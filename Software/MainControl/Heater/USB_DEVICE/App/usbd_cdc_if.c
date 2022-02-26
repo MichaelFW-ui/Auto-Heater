@@ -331,7 +331,7 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
 /**
- * @brief 该函数将极大增加Code大小。小心使用
+ * @brief 该函数将极大增加Code大小。小心使�?
  * 
  * @param fmt 
  * @param ... 

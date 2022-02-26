@@ -15,6 +15,7 @@
 #include "stm32f4xx.h"
 #include "spi.h"
 #include "gpio.h"
+#include "fontlib.h"
 
 #define MAX_TIMEOUT_MS 1000
 #define USE_HORIZONTAL 2
@@ -28,7 +29,6 @@
 #define LCD_H 80
 #endif
 
-extern lcd_st7735s hLCD;
 
 struct lcd_st7735s {
     struct __gpio {
@@ -57,7 +57,12 @@ struct lcd_st7735s {
     void WriteData_8bits(uint8_t * bytes, uint8_t len);
     void WriteCommand(uint8_t command);
     void SetAddress(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+    void Fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
+              uint16_t color);
+    void PrintASCII(uint8_t ch,uint16_t x, uint16_t y, uint16_t color, uint16_t bg_color, FontSize size);
 };
+
+extern lcd_st7735s hLCD;
 
 void LCD_Init(lcd_st7735s *lcd);
 

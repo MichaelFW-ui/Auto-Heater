@@ -2,7 +2,8 @@
     "files.associations": {
         "usbd_cdc_if.h": "c",
         "process.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "initializer_list": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
