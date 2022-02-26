@@ -3,7 +3,14 @@
         "usbd_cdc_if.h": "c",
         "process.h": "c",
         "main.h": "c",
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "cmath": "cpp",
+        "exception": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp",
+        "__config": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

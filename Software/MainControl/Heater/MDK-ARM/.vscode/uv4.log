@@ -1,2 +1,16 @@
-Load "Heater\\Heater.axf" 
-Erase Done.Programming Done.Verify OK.Flash Load finished at 14:11:43
+*** Using Compiler 'V6.10.1', folder: 'E:\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'Heater'
+../User/Src/ctrl.cpp(24): error: use of undeclared identifier 'GetTemperature'
+    handle->CurrentTemperature = GetTemperature();/*  TODO  */
+                                 ^
+../User/Src/ctrl.cpp(25): error: use of undeclared identifier 'GetTemperature'
+    handle->TargetTemperature[CurveControl::HeatingMode::IDLE] = GetTemperature();
+                                                                 ^
+../User/Src/ctrl.cpp(53): error: use of undeclared identifier 'GetTemperature'
+  CurrentTemperature = GetTemperature();
+                       ^
+3 errors generated.
+compiling ctrl.cpp...
+"Heater\Heater.axf" - 3 Error(s), 0 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:00
