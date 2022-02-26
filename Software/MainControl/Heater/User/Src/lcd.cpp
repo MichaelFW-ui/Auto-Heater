@@ -30,11 +30,13 @@ void LCD_Init(lcd_st7735s *lcd) {
 
 void lcd_st7735s::WriteByte(uint8_t byte) {
   CS_Low();
+  DC_High();
   HAL_SPI_Transmit(this->spi, &byte, 1, MAX_TIMEOUT_MS);
 }
 
 void lcd_st7735s::WriteHalfWord(uint16_t word) {
   CS_Low();
+  DC_High();
   uint8_t bytes[2] = {(uint8_t)(word >> 8), (uint8_t)word};
   HAL_SPI_Transmit(this->spi, bytes, 2, MAX_TIMEOUT_MS);
 }
@@ -48,6 +50,7 @@ void lcd_st7735s::WriteCommand(uint8_t command) {
 
 void lcd_st7735s::WriteData_8bits(uint8_t *bytes, uint8_t len) {
   CS_Low();
+  DC_High();
   HAL_SPI_Transmit(this->spi, bytes, len, MAX_TIMEOUT_MS);
 }
 
@@ -57,26 +60,24 @@ void lcd_st7735s::Init(void) {
   RES_High();  // 启动
   osDelay(100);
 
-  BLK_High();  //打开背光
-  osDelay(100);
 
   WriteCommand(0x11);  // Sleep out
   osDelay(120);     // Delay 120ms
   WriteCommand(0xB1);  // Normal mode
-  WriteByte(0x05);
-  WriteByte(0x3C);
-  WriteByte(0x3C);
+  WriteByte(0x02);
+  WriteByte(0x25);
+  WriteByte(0x26);
   WriteCommand(0xB2);  // Idle mode
-  WriteByte(0x05);
-  WriteByte(0x3C);
-  WriteByte(0x3C);
+  WriteByte(0x02);
+  WriteByte(0x25);
+  WriteByte(0x26);
   WriteCommand(0xB3);  // Partial mode
-  WriteByte(0x05);
-  WriteByte(0x3C);
-  WriteByte(0x3C);
-  WriteByte(0x05);
-  WriteByte(0x3C);
-  WriteByte(0x3C);
+  WriteByte(0x02);
+  WriteByte(0x25);
+  WriteByte(0x26);
+  WriteByte(0x02);
+  WriteByte(0x25);
+  WriteByte(0x26);
   WriteCommand(0xB4);  // Dot inversion
   WriteByte(0x03);
   WriteCommand(0xC0);  // AVDD GVDD
@@ -158,6 +159,9 @@ void lcd_st7735s::Init(void) {
   WriteByte(0x00);
   WriteByte(0xA0);  // 160
   WriteCommand(0x2C);
+
+  BLK_High();  //打开背光
+  osDelay(100);
   CS_High();
 }
 
@@ -214,12 +218,57 @@ void lcd_st7735s::PrintASCII(uint8_t ch, uint16_t x, uint16_t y, uint16_t color,
                              uint16_t bg_color, FontSize size) {
   FontLib_CharInfo_t ch_t = fontLib.GetFont_ASCII(ch, size);
   if (!ch_t.font) return;
-  SetAddress(x, y, x + ch_t.width-1, y + ch_t.height-1);
+  CS_High();
+  SetAddress(x, y, x + ch_t.width - 1, y + ch_t.height - 1);
   uint8_t LocalSize = (ch_t.width - 1) / 8 + 1;
   for (int i = 0; i < ch_t.height; ++i) {
     for (int j = 0; j < ch_t.width; ++j) {
-      if ((ch_t.font)[i * LocalSize + j / 8] & (1 << (j % 8))) WriteHalfWord(color);
+      if ((ch_t.font)[i * LocalSize + j / 8] & (1 << (j % 8)))
+        WriteHalfWord(color);
       else WriteHalfWord(bg_color);
     }
+  }
+  CS_High();
+}
+
+void lcd_st7735s::PrintASCII_Transparent(uint8_t ch, uint16_t x, uint16_t y, uint16_t color,
+                             FontSize size) {
+  FontLib_CharInfo_t ch_t = fontLib.GetFont_ASCII(ch, size);
+  if (!ch_t.font) return;
+  CS_High();
+  uint8_t LocalSize = (ch_t.width - 1) / 8 + 1;
+  for (int i = 0; i < ch_t.height; ++i) {
+    for (int j = 0; j < ch_t.width; ++j) {
+      if ((ch_t.font)[i * LocalSize + j / 8] & (1 << (j % 8))) {
+        // if 没有加大括号！！！出了大bug
+        SetAddress(x + j, y + i, x + j, y + i);
+        WriteHalfWord(color);
+      }
+    }
+  }
+  CS_High();
+}
+void lcd_st7735s::Print_String(const char *fmt, uint16_t x, uint16_t y,
+                               uint16_t color,FontSize size) {
+  uint16_t width;
+  switch (size) {
+    case FontSize_1206:
+      width = 6;
+      break;
+    case FontSize_1608:
+      width = 8;
+      break;
+    case FontSize_2412:
+      width = 12;
+      break;
+    case FontSize_3216:
+      width = 16;
+      break;
+    default:
+      return;
+  }
+  for (int cur = 0; fmt[cur]; ++cur) {
+    if (fmt[cur] == '\r' || fmt[cur] == '\n') return;
+    PrintASCII_Transparent(fmt[cur], x + cur * width, y, color, size);
   }
 }

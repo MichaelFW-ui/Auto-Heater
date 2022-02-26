@@ -29,6 +29,9 @@
 #define LCD_H 80
 #endif
 
+__STATIC_INLINE uint16_t RGB(uint8_t r, uint8_t g, uint8_t b) {
+  return (((r & (0x1f)) << 11) | ((g & 0x2f) << 5) | (b & 0x1f));
+}
 
 struct lcd_st7735s {
     struct __gpio {
@@ -60,6 +63,8 @@ struct lcd_st7735s {
     void Fill(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
               uint16_t color);
     void PrintASCII(uint8_t ch,uint16_t x, uint16_t y, uint16_t color, uint16_t bg_color, FontSize size);
+    void PrintASCII_Transparent(uint8_t ch, uint16_t x, uint16_t y, uint16_t color, FontSize size);
+    void Print_String(const char *fmt, uint16_t x, uint16_t y, uint16_t color, FontSize size);
 };
 
 extern lcd_st7735s hLCD;

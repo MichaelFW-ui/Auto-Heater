@@ -426,7 +426,6 @@ FontLib_CharInfo_t FontLib::GetFont_ASCII_STM32(uint8_t ch, FontSize size) {
 
     /*
     NOTICE:字库中的字符是按照ch = ch - ' '编排的。
-    之后将获取完整的字库！！！
     */
     ch -= ' ';
     if (size == FontSize::FontSize_1206)

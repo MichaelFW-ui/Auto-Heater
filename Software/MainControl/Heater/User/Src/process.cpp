@@ -26,7 +26,7 @@ void Process_Main_Init(void) {
 
 void Process_Main_Run(void) {
     /*TODO*/
-    uint16_t color = 1000;
+    uint16_t color = RGB(0x1f, 0, 0);
     LCD_Init(&hLCD);
     FontLib_Init(&fontLib);
   for(;;)
@@ -36,14 +36,9 @@ void Process_Main_Run(void) {
     osDelay(500);
 
     hLCD.Fill(0,0,LCD_W,LCD_H,color);
-    color += 1000;
     osDelay(500);
-    hLCD.PrintASCII('I', 50,50,0xFFFF, 0, FontSize_1206);
-    hLCD.PrintASCII('A', 60,50,0xFFFF, 0, FontSize_1206);
-    hLCD.PrintASCII('M', 70,50,0xFFFF, 0, FontSize_1206);
-    hLCD.PrintASCII('i', 100,20,0xFFFF, 0, FontSize_1206);
-    hLCD.PrintASCII('a', 110,20,0xFFFF, 0, FontSize_1206);
-    hLCD.PrintASCII('m', 120,20,0xFFFF, 0, FontSize_1206);
+    hLCD.Print_String("Here I am", 20, 5, RGB(0,0x2f, 0), FontSize_2412);
+    hLCD.Print_String("MichaelFW Presents", 20, 35, RGB(0,0,0x1f), FontSize_1206);
 
     
 
