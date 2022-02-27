@@ -65,6 +65,8 @@ struct lcd_st7735s {
     void PrintASCII(uint8_t ch,uint16_t x, uint16_t y, uint16_t color, uint16_t bg_color, FontSize size);
     void PrintASCII_Transparent(uint8_t ch, uint16_t x, uint16_t y, uint16_t color, FontSize size);
     void Print_String(const char *fmt, uint16_t x, uint16_t y, uint16_t color, FontSize size);
+
+    void DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
 };
 
 extern lcd_st7735s hLCD;

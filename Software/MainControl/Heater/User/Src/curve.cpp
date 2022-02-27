@@ -40,6 +40,44 @@ float PID_TypeDef::Compute(void) {
     return Out;
 }
 
+uint8_t Bresenham::empty(void) {
+  switch (status) {
+    case 0:
+      return xi == x2 && yi == y2;
+      break;
+    case 1:
+      return xi == x2 && yi == y2;
+      break;
+    case 2:
+      return xi == x2 && -yi == y2;
+      break;
+    case 3:
+      return xi == x2 && -yi == y2;
+      break;
+    case 4:
+      return -xi == x2 && yi == y2;
+      break;
+    case 5:
+      return -xi == x2 && yi == y2;
+      break;
+    case 6:
+      return -xi == x2 && -yi == y2;
+      break;
+    case 7:
+      return -xi == x2 && -yi == y2;
+      break;
+    case 8:
+      return xi == x2 && yi == y2;
+      break;
+    case 9:
+      return xi == x2 && yi == y2;
+      break;
+    default:
+      return 1;
+      break;
+  }
+}
+
 Point<int16_t> Bresenham::NextPoint(void) {
   switch (status) {
     case 0:
@@ -50,7 +88,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         yi += 1;
       }
       xi += 1;
-      return Point<int16_t>{xi, yi};
+      return Point<int16_t>{static_cast<int16_t>(xi), static_cast<int16_t>(yi)};
       break;
     case 1:
       if (pi <= 0) {
@@ -60,7 +98,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         xi += 1;
       }
       yi += 1;
-      return Point<int16_t>{xi, yi};
+      return Point<int16_t>{static_cast<int16_t>(xi), static_cast<int16_t>(yi)};
       break;
     case 2:
       if (pi <= 0) {
@@ -70,7 +108,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         yi += 1;
       }
       xi += 1;
-      return Point<int16_t>{xi, static_cast<int16_t>(-yi)};
+      return Point<int16_t>{static_cast<int16_t>(xi), static_cast<int16_t>(-yi)};
       break;
     case 3:
       if (pi <= 0) {
@@ -80,7 +118,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         xi += 1;
       }
       yi += 1;
-      return Point<int16_t>{xi, static_cast<int16_t>(-yi)};
+      return Point<int16_t>{static_cast<int16_t>(xi), static_cast<int16_t>(-yi)};
       break;
     case 4:
       if (pi <= 0) {
@@ -90,7 +128,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         yi += 1;
       }
       xi += 1;
-      return Point<int16_t>{static_cast<int16_t>(-xi), yi};
+      return Point<int16_t>{static_cast<int16_t>(-xi), static_cast<int16_t>(yi)};
       break;
     case 5:
       if (pi <= 0) {
@@ -100,7 +138,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         xi += 1;
       }
       yi += 1;
-      return Point<int16_t>{static_cast<int16_t>(-xi), yi};
+      return Point<int16_t>{static_cast<int16_t>(-xi), static_cast<int16_t>(yi)};
       break;
     case 6:
       if (pi <= 0) {
@@ -110,8 +148,7 @@ Point<int16_t> Bresenham::NextPoint(void) {
         yi += 1;
       }
       xi += 1;
-      return Point<int16_t>{static_cast<int16_t>(-xi),
-                            static_cast<int16_t>(-yi)};
+      return Point<int16_t>{static_cast<int16_t>(-xi), static_cast<int16_t>(-yi)};
       break;
     case 7:
       if (pi <= 0) {
@@ -121,8 +158,24 @@ Point<int16_t> Bresenham::NextPoint(void) {
         xi += 1;
       }
       yi += 1;
-      return Point<int16_t>{static_cast<int16_t>(-xi),
-                            static_cast<int16_t>(-yi)};
+      return Point<int16_t>{static_cast<int16_t>(-xi), static_cast<int16_t>(-yi)};
+      break;
+
+    case 8:
+      if (dy > 0) {
+        yi += 1;
+      } else {
+        yi -= 1;
+      }
+      return Point<int16_t>{static_cast<int16_t>(xi), static_cast<int16_t>(yi)};
+      break;
+    case 9:
+      if (dx > 0) {
+        xi += 1;
+      } else {
+        xi -= 1;
+      }
+      return Point<int16_t>{static_cast<int16_t>(xi), static_cast<int16_t>(yi)};
       break;
     default:
       return Point<int16_t>{0, 0};

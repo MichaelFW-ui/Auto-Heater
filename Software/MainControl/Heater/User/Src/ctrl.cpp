@@ -14,6 +14,8 @@
 
 CurveControl curveControl;
 
+float GetTemperature(void) {return 0;}
+
 void CurveControl_Init(CurveControl *handle) {
     handle->tim = &htim1;
     handle->Channel = TIM_CHANNEL_2;

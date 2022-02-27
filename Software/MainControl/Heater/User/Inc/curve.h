@@ -91,17 +91,24 @@ struct Bresenham {
     *   5: dx < 0, dy > 0, |dy| > |dx|
     *   6: dx < 0, dy < 0, |dy| < |dx|
     *   7: dx < 0, dy < 0, |dy| > |dx|
+    *   8: dx = 0
+    *   9: dy = 0
     */
     Bresenham(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
         : x1(x1), y1(y1), x2(x2), y2(y2) {
-      if (dx > 0 && dy > 0 && dy < dx) status = 0;
-      if (dx > 0 && dy > 0 && dy < dx) status = 1;
-      if (dx > 0 && dy < 0 && dy < -dx) status = 2;
-      if (dx > 0 && dy < 0 && dy < -dx) status = 3;
-      if (dx < 0 && dy > 0 && -dy < dx) status = 4;
-      if (dx < 0 && dy > 0 && -dy < dx) status = 5;
-      if (dx < 0 && dy < 0 && -dy < -dx) status = 6;
-      if (dx < 0 && dy < 0 && -dy < -dx) status = 7;
+          dx = x2 - x1;
+          dy = y2 - y1;
+          status = 0;
+      if (dx > 0 && dy > 0 && dy <= dx) { status = 0; }
+      if (dx > 0 && dy > 0 && dy > dx) { status = 1; }
+      if (dx > 0 && dy < 0 && -dy <= dx) { status = 2; dy = -dy;}
+      if (dx > 0 && dy < 0 && -dy > dx) { status = 3; dy = -dy;}
+      if (dx < 0 && dy > 0 && dy <= -dx) { status = 4; dx = -dx;}
+      if (dx < 0 && dy > 0 && dy > -dx) { status = 5; dx = -dx;}
+      if (dx < 0 && dy < 0 && -dy <= -dx) { status = 6; dx = -dx; dy = -dy;}
+      if (dx < 0 && dy < 0 && -dy > -dx) { status = 7; dx = -dx; dy = -dy;}
+      if (dx == 0) status = 8;
+      if (dy == 0) status = 9;
 
       switch (status) {
         case 0:
@@ -144,13 +151,17 @@ struct Bresenham {
           yi = -y1;
           pi = 2 * dx - dy;
           break;
+        case 8:
+        case 9:
+          xi = x1;
+          yi = y1;
         default:
           break;
       }
     }
 
     Point<int16_t> NextPoint(void);
-    uint8_t empty(void) { return xi == x2 || yi == y2; }
+    uint8_t empty(void);
 };
 
 #endif // !__CURVE_H_

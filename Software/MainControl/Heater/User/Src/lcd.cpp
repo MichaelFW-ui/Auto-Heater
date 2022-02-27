@@ -12,6 +12,7 @@
 #include "lcd.h"
 #include "cmsis_os.h"
 #include "fontlib.h"
+#include "curve.h"
 
 lcd_st7735s hLCD;
 
@@ -270,5 +271,16 @@ void lcd_st7735s::Print_String(const char *fmt, uint16_t x, uint16_t y,
   for (int cur = 0; fmt[cur]; ++cur) {
     if (fmt[cur] == '\r' || fmt[cur] == '\n') return;
     PrintASCII_Transparent(fmt[cur], x + cur * width, y, color, size);
+  }
+}
+
+void lcd_st7735s::DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
+                           uint16_t color) {
+  Bresenham bsh(x1, y1, x2, y2);
+  while (!bsh.empty()) {
+    Point<int16_t> pt = bsh.NextPoint();
+    SetAddress(pt.x, pt.y, pt.x, pt.y);
+    WriteHalfWord(color);
+    HAL_Delay(10);
   }
 }
