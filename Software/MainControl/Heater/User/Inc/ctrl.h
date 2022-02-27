@@ -14,6 +14,7 @@
 
 #include "stm32f4xx.h"
 #include "tim.h"
+#include "lcd.h"
 struct CurveControl {
     TIM_HandleTypeDef *tim;
     uint32_t Channel;
@@ -42,6 +43,16 @@ extern CurveControl curveControl;
 
 void CurveControl_Init(CurveControl *handle);
 
+struct Display {
+  lcd_st7735s * lcd;
+
+  void DrawTestPage(void);
+  void DrawOperationPage(void);
+  void DrawAboutPage(void);
+  void DrawWelcomePage(void);
+};
+
+extern Display displayLCD;
 
 
 #endif // !__CTRL_H_

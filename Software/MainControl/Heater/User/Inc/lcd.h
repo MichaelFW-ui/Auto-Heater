@@ -67,11 +67,13 @@ struct lcd_st7735s {
     void Print_String(const char *fmt, uint16_t x, uint16_t y, uint16_t color, FontSize size);
 
     void DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
+    void DrawLine_WithDelay(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color, uint32_t delay);
 };
 
 extern lcd_st7735s hLCD;
 
 void LCD_Init(lcd_st7735s *lcd);
+
 
 #endif // !__LCD_H_
 

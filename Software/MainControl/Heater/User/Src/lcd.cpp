@@ -161,6 +161,8 @@ void lcd_st7735s::Init(void) {
   WriteByte(0xA0);  // 160
   WriteCommand(0x2C);
 
+  Fill(0,0,160,80,0);
+
   BLK_High();  //打开背光
   osDelay(100);
   CS_High();
@@ -281,6 +283,16 @@ void lcd_st7735s::DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
     Point<int16_t> pt = bsh.NextPoint();
     SetAddress(pt.x, pt.y, pt.x, pt.y);
     WriteHalfWord(color);
-    HAL_Delay(10);
+  }
+}
+
+void lcd_st7735s::DrawLine_WithDelay(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
+                           uint16_t color, uint32_t delay) {
+  Bresenham bsh(x1, y1, x2, y2);
+  while (!bsh.empty()) {
+    Point<int16_t> pt = bsh.NextPoint();
+    SetAddress(pt.x, pt.y, pt.x, pt.y);
+    WriteHalfWord(color);
+    osDelay(delay);
   }
 }
