@@ -64,5 +64,94 @@ __STATIC_INLINE float constrain(float value, float min, float max) {
     return value;
 }
 
+template<typename T>
+struct Point {
+  T x, y;
+};
+
+/**
+ * @brief 绘制直线的高阶算法
+ * 
+ */
+struct Bresenham {
+    int16_t x1, x2;
+    int16_t y1, y2;
+
+    int16_t dx = x2 - x1, dy = y2 - y1;
+
+    int16_t pi, xi, yi;
+
+    uint8_t status=0;
+    /*
+    *   0: dx > 0, dy > 0, |dy| < |dx|
+    *   1: dx > 0, dy > 0, |dy| > |dx|
+    *   2: dx > 0, dy < 0, |dy| < |dx|
+    *   3: dx > 0, dy < 0, |dy| > |dx|
+    *   4: dx < 0, dy > 0, |dy| < |dx|
+    *   5: dx < 0, dy > 0, |dy| > |dx|
+    *   6: dx < 0, dy < 0, |dy| < |dx|
+    *   7: dx < 0, dy < 0, |dy| > |dx|
+    */
+    Bresenham(int16_t x1, int16_t y1, int16_t x2, int16_t y2)
+        : x1(x1), y1(y1), x2(x2), y2(y2) {
+      if (dx > 0 && dy > 0 && dy < dx) status = 0;
+      if (dx > 0 && dy > 0 && dy < dx) status = 1;
+      if (dx > 0 && dy < 0 && dy < -dx) status = 2;
+      if (dx > 0 && dy < 0 && dy < -dx) status = 3;
+      if (dx < 0 && dy > 0 && -dy < dx) status = 4;
+      if (dx < 0 && dy > 0 && -dy < dx) status = 5;
+      if (dx < 0 && dy < 0 && -dy < -dx) status = 6;
+      if (dx < 0 && dy < 0 && -dy < -dx) status = 7;
+
+      switch (status) {
+        case 0:
+          xi = x1;
+          yi = y1;
+          pi = 2 * dy - dx;
+          break;
+        case 1:
+          xi = x1;
+          yi = y1;
+          pi = 2 * dx - dy;
+          break;
+        case 2:
+          xi = x1;
+          yi = -y1;
+          pi = 2 * dy - dx;
+          break;
+        case 3:
+          xi = x1;
+          yi = -y1;
+          pi = 2 * dx - dy;
+          break;
+        case 4:
+          xi = -x1;
+          yi = y1;
+          pi = 2 * dy - dx;
+          break;
+        case 5:
+          xi = -x1;
+          yi = y1;
+          pi = 2 * dx - dy;
+          break;
+        case 6:
+          xi = -x1;
+          yi = -y1;
+          pi = 2 * dy - dx;
+          break;
+        case 7:
+          xi = -x1;
+          yi = -y1;
+          pi = 2 * dx - dy;
+          break;
+        default:
+          break;
+      }
+    }
+
+    Point<int16_t> NextPoint(void);
+    uint8_t empty(void) { return xi == x2 || yi == y2; }
+};
+
 #endif // !__CURVE_H_
 

@@ -16,13 +16,13 @@
 #include "tim.h"
 struct CurveControl {
     TIM_HandleTypeDef *tim;
-    uint16_t Channel;
+    uint32_t Channel;
 
-    enum HeatingMode {IDLE, HEATING, PRESERVING, WELDING_HEAT, WELDING, COOLING} OperatingStatus;
+    enum HeatingMode {IDLE = 0x00, HEATING, PRESERVING, WELDING_HEAT, WELDING, COOLING} OperatingStatus;
     uint16_t TimeSinceBeginning;
     float CurrentTemperature;
     float TargetTemp;
-    uint16_t TargetTime[10];
+    uint32_t TargetTime[10];
     float TargetTemperature[10];
     /*
      * TT[] : IDLE:0,     HEATING:1,       PRESERVING:2,     WELDING:3, COOLING:4

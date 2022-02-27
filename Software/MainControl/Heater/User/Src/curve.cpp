@@ -39,3 +39,93 @@ float PID_TypeDef::Compute(void) {
     Out = constrain(Out, -Out_Max, Out_Max);
     return Out;
 }
+
+Point<int16_t> Bresenham::NextPoint(void) {
+  switch (status) {
+    case 0:
+      if (pi <= 0) {
+        pi += 2 * dy;
+      } else {
+        pi += 2 * dy - 2 * dx;
+        yi += 1;
+      }
+      xi += 1;
+      return Point<int16_t>{xi, yi};
+      break;
+    case 1:
+      if (pi <= 0) {
+        pi += 2 * dx;
+      } else {
+        pi += 2 * dx - 2 * dy;
+        xi += 1;
+      }
+      yi += 1;
+      return Point<int16_t>{xi, yi};
+      break;
+    case 2:
+      if (pi <= 0) {
+        pi += 2 * dy;
+      } else {
+        pi += 2 * dy - 2 * dx;
+        yi += 1;
+      }
+      xi += 1;
+      return Point<int16_t>{xi, static_cast<int16_t>(-yi)};
+      break;
+    case 3:
+      if (pi <= 0) {
+        pi += 2 * dx;
+      } else {
+        pi += 2 * dx - 2 * dy;
+        xi += 1;
+      }
+      yi += 1;
+      return Point<int16_t>{xi, static_cast<int16_t>(-yi)};
+      break;
+    case 4:
+      if (pi <= 0) {
+        pi += 2 * dy;
+      } else {
+        pi += 2 * dy - 2 * dx;
+        yi += 1;
+      }
+      xi += 1;
+      return Point<int16_t>{static_cast<int16_t>(-xi), yi};
+      break;
+    case 5:
+      if (pi <= 0) {
+        pi += 2 * dx;
+      } else {
+        pi += 2 * dx - 2 * dy;
+        xi += 1;
+      }
+      yi += 1;
+      return Point<int16_t>{static_cast<int16_t>(-xi), yi};
+      break;
+    case 6:
+      if (pi <= 0) {
+        pi += 2 * dy;
+      } else {
+        pi += 2 * dy - 2 * dx;
+        yi += 1;
+      }
+      xi += 1;
+      return Point<int16_t>{static_cast<int16_t>(-xi),
+                            static_cast<int16_t>(-yi)};
+      break;
+    case 7:
+      if (pi <= 0) {
+        pi += 2 * dx;
+      } else {
+        pi += 2 * dx - 2 * dy;
+        xi += 1;
+      }
+      yi += 1;
+      return Point<int16_t>{static_cast<int16_t>(-xi),
+                            static_cast<int16_t>(-yi)};
+      break;
+    default:
+      return Point<int16_t>{0, 0};
+      break;
+  }
+}

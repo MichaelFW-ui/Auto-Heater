@@ -46,15 +46,33 @@ void CurveControl::OnHeatingOperation(void) {
     return;
   }
   ++TimeSinceBeginning;
-  uint8_t status = OperatingStatus;
-  if (TimeSinceBeginning == TargetTime[status]) {
-      ++status;
+  if (TimeSinceBeginning == TargetTime[OperatingStatus]) {
+    switch (OperatingStatus) {
+      case HeatingMode::HEATING:
+        OperatingStatus = HeatingMode::PRESERVING;
+        break;
+      case HeatingMode::PRESERVING:
+        OperatingStatus = HeatingMode::WELDING_HEAT;
+        break;
+      case HeatingMode::WELDING_HEAT:
+        OperatingStatus = HeatingMode::WELDING;
+        break;
+      case HeatingMode::WELDING:
+        OperatingStatus = HeatingMode::COOLING;
+        break;
+      case HeatingMode::COOLING:
+      case HeatingMode::IDLE:
+      default:
+        break;
+    }
   }
+  uint8_t status = OperatingStatus;
   CurrentTemperature = GetTemperature();
   TargetTemp =
       (TargetTemperature[status] - TargetTemperature[status - 1]) /
       (TargetTime[status] - TargetTime[status - 1]) *
       (TimeSinceBeginning - TargetTime[status - 1]);
+
 
       /*
       TODO

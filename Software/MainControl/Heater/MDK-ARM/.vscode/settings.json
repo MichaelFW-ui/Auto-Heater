@@ -10,7 +10,23 @@
         "utility": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp",
-        "__config": "cpp"
+        "__config": "cpp",
+        "bit": "cpp",
+        "cctype": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "cstddef": "cpp",
+        "cstdint": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "cstring": "cpp",
+        "cwchar": "cpp",
+        "cwctype": "cpp",
+        "limits": "cpp",
+        "xstddef": "cpp",
+        "__debug": "cpp",
+        "__nullptr": "cpp",
+        "__tuple": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
