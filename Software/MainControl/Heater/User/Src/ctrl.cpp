@@ -12,11 +12,11 @@
 #include "ctrl.h"
 #include "tim.h"
 #include "curve.h"
+#include "temp.h"
 
 CurveControl curveControl;
 Display displayLCD;
 
-float GetTemperature(void) {return 0;}
 
 
 void CurveControl_Init(CurveControl *handle) {
@@ -42,6 +42,23 @@ void CurveControl_Init(CurveControl *handle) {
     handle->TargetTime[CurveControl::HeatingMode::COOLING] = 90 + 80 + 30 + 30 + 70;
 
     displayLCD.lcd = &hLCD;
+
+    handle->pid.Ki = 0;
+    handle->pid.Kp = 0;
+    handle->pid.Kd = 0;
+    handle->pid.I_Term_Max = 0;
+    handle->pid.Out_Max = 1000;
+    
+    handle->pid.Current = GetTemperature();
+    handle->pid.Target = GetTemperature();
+    handle->pid.I_SeparThresh = 0;
+    handle->pid.DeadZone = 0;
+    handle->pid.last_tick = HAL_GetTick();
+    handle->pid.last_error = 0;
+    handle->pid.error_filter.trust = 1;
+    handle->pid.d_filter.trust = 1;
+  
+
 
 }
 void CurveControl::BeginHeating(void) {
@@ -69,6 +86,8 @@ void CurveControl::OnHeatingOperation(void) {
         OperatingStatus = HeatingMode::COOLING;
         break;
       case HeatingMode::COOLING:
+        OperatingStatus = HeatingMode::IDLE;
+        break;
       case HeatingMode::IDLE:
       default:
         break;
@@ -80,7 +99,41 @@ void CurveControl::OnHeatingOperation(void) {
       (TargetTemperature[status] - TargetTemperature[status - 1]) /
       (TargetTime[status] - TargetTime[status - 1]) *
       (TimeSinceBeginning - TargetTime[status - 1]);
+  
+  pid.UpdateCurrent(CurrentTemperature);
+  
+  int16_t out = (int16_t)(pid.Compute());
+  if (out < 0) out = 0;
 
+// 输出，打印信息
+  switch (OperatingStatus) {
+    case HeatingMode::HEATING:
+      displayLCD.PrintInformation("HEATING:", out);
+      __HAL_TIM_SetCompare(this->tim, this->Channel, (uint16_t)out);
+      break;
+    case HeatingMode::PRESERVING:
+      displayLCD.PrintInformation("PRESERVING:", out);
+      __HAL_TIM_SetCompare(this->tim, this->Channel, (uint16_t)out);
+      break;
+    case HeatingMode::WELDING_HEAT:
+      displayLCD.PrintInformation("WELD_HEATING:", out);
+      __HAL_TIM_SetCompare(this->tim, this->Channel, (uint16_t)out);
+      break;
+    case HeatingMode::WELDING:
+      displayLCD.PrintInformation("WELDING:", out);
+      __HAL_TIM_SetCompare(this->tim, this->Channel, (uint16_t)out);
+      break;
+    case HeatingMode::COOLING:
+      displayLCD.PrintInformation("COOLING:", out);
+      __HAL_TIM_SetCompare(this->tim, this->Channel, 0);
+      break;
+    case HeatingMode::IDLE:
+      displayLCD.PrintInformation("IDLE:waiting", 0);
+      __HAL_TIM_SetCompare(this->tim, this->Channel, 0);
+      break;
+    default:
+      break;
+  }
 
       /*
       TODO
@@ -88,7 +141,11 @@ void CurveControl::OnHeatingOperation(void) {
         输出调试信息
         绘制曲线
       */
+
+     displayLCD.DrawPointOnCurve(TimeSinceBeginning, CurrentTemperature);
 }
+
+
 
 
   void Display::DrawTestPage(void) {
@@ -125,8 +182,15 @@ void CurveControl::OnHeatingOperation(void) {
     lcd->Print_String("MichaelFW Presents", 30, 67, 0x0fff, FontSize_1206);
   }
 
+  void Display::PrintInformation(const char *fmt, int16_t out) {
+    lcd->Fill(0, 0, LCD_W, split_right.y, color_background);
+    lcd->DrawLine(split_left.x, split_left.y, split_right.x, split_right.y, color_split);
+    lcd->Print_String(fmt, 5, 3, color_status, FontSize_1206);
+    if (out > 100)
+      lcd->Fill(145, split_right.y, 155, out / 50, 0xffff);
+  }
+
   void Display::DrawOperationPage(void) {
-    Point<int16_t> y_end, x_end, origin;
     y_end.x = 5;
     y_end.y = 28;
     x_end.x = 151;
@@ -134,17 +198,16 @@ void CurveControl::OnHeatingOperation(void) {
     origin.x = 5;
     origin.y = 75;
 
-    Point<int16_t> split_left, split_right;
     split_left.x = 0;
     split_left.y = 21;
     split_right.x = 160;
     split_right.y = 21;
 
-    uint16_t color_axis = 0xffff;
-    uint16_t color_split = RGB(0,0x1f,0);
-    uint16_t color_status = RGB(0x1f,0,0);
-    uint16_t color_background = RGB(0,0,0x0f);
-    uint16_t color_heat_line = RGB(0x1f, 0x2f, 0x07);
+    color_axis = 0xffff;
+    color_split = RGB(0,0x1f,0);
+    color_status = RGB(0x1f,0,0);
+    color_background = RGB(0,0,0x0f);
+    color_heat_line = RGB(0x1f, 0x2f, 0x07);
 
     lcd->Fill(0, 0, LCD_W, LCD_H, color_background);
 
@@ -239,4 +302,10 @@ void CurveControl::OnHeatingOperation(void) {
   }
   void Display::DrawAboutPage(void) {
 
+  }
+
+  void Display::DrawPointOnCurve(uint16_t time, float temp) {
+    int16_t x = origin.x + time / 3;
+    int16_t y = origin.y - temp / 5;
+    lcd->DrawPoint(x, y, color_heat_line);
   }

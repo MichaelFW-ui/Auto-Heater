@@ -20,8 +20,11 @@ void Process_Main_Init(void);
 
 void Process_Main_Run(void);
 
+void Process_Circular_Run(void);
+
 #ifdef  __cplusplus
 }
+
 #endif
 
 #endif // !__PROCESS_H_

@@ -31,6 +31,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
+#include "process.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,6 +101,7 @@ int main(void)
   MX_ADC1_Init();
   MX_SPI1_Init();
   MX_TIM1_Init();
+  MX_TIM9_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -189,6 +191,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
+  if (htim->Instance == TIM9) {
+    Process_Circular_Run();
+  }
 
   /* USER CODE END Callback 1 */
 }

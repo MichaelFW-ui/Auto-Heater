@@ -15,9 +15,11 @@
 #include "stm32f4xx.h"
 #include "tim.h"
 #include "lcd.h"
+#include "curve.h"
 struct CurveControl {
     TIM_HandleTypeDef *tim;
     uint32_t Channel;
+    PID_TypeDef pid;
 
     enum HeatingMode {IDLE = 0x00, HEATING, PRESERVING, WELDING_HEAT, WELDING, COOLING} OperatingStatus;
     uint16_t TimeSinceBeginning;
@@ -46,10 +48,21 @@ void CurveControl_Init(CurveControl *handle);
 struct Display {
   lcd_st7735s * lcd;
 
+    Point<int16_t> y_end, x_end, origin;
+    Point<int16_t> split_left, split_right;
+    uint16_t color_axis;
+    uint16_t color_split;
+    uint16_t color_status;
+    uint16_t color_background;
+    uint16_t color_heat_line;
+
   void DrawTestPage(void);
   void DrawOperationPage(void);
   void DrawAboutPage(void);
   void DrawWelcomePage(void);
+  void DrawPointOnCurve(uint16_t time, float temp);
+
+  void PrintInformation(const char *fmt, int16_t out);
 };
 
 extern Display displayLCD;

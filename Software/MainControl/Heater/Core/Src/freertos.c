@@ -130,11 +130,11 @@ void StartMainTask(void const * argument)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartMainTask */
     Process_Main_Init();
+    Process_Main_Run();
   /* Infinite loop */
   for(;;)
   {
     osDelay(1);
-    Process_Main_Run();
   }
   /* USER CODE END StartMainTask */
 }

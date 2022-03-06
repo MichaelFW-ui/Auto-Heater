@@ -278,21 +278,33 @@ void lcd_st7735s::Print_String(const char *fmt, uint16_t x, uint16_t y,
 
 void lcd_st7735s::DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
                            uint16_t color) {
+  CS_High();
   Bresenham bsh(x1, y1, x2, y2);
   while (!bsh.empty()) {
     Point<int16_t> pt = bsh.NextPoint();
     SetAddress(pt.x, pt.y, pt.x, pt.y);
     WriteHalfWord(color);
   }
+  CS_High();
 }
 
 void lcd_st7735s::DrawLine_WithDelay(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2,
                            uint16_t color, uint32_t delay) {
+  CS_High();
   Bresenham bsh(x1, y1, x2, y2);
   while (!bsh.empty()) {
     Point<int16_t> pt = bsh.NextPoint();
     SetAddress(pt.x, pt.y, pt.x, pt.y);
     WriteHalfWord(color);
-    osDelay(delay);
+    if (delay)
+      osDelay(delay);
   }
+  CS_High();
+}
+
+void lcd_st7735s::DrawPoint(int16_t x, int16_t y, int16_t color) {
+  CS_High();
+  SetAddress(x, y, x, y);
+  WriteHalfWord(color);
+  CS_High();
 }

@@ -68,6 +68,7 @@ struct lcd_st7735s {
 
     void DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color);
     void DrawLine_WithDelay(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t color, uint32_t delay);
+    void DrawPoint(int16_t x, int16_t y, int16_t color);
 };
 
 extern lcd_st7735s hLCD;
