@@ -53,6 +53,8 @@ extern uint8_t buf[];
 extern uint32_t data_nums;
 /* USER CODE END Variables */
 osThreadId mainTaskHandle;
+osThreadId SubTaskHandle;
+osThreadId CommunicationHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -60,6 +62,8 @@ osThreadId mainTaskHandle;
 /* USER CODE END FunctionPrototypes */
 
 void StartMainTask(void const * argument);
+void StartSubTask(void const * argument);
+void StartCommunicate(void const * argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -111,6 +115,14 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(mainTask, StartMainTask, osPriorityNormal, 0, 1024);
   mainTaskHandle = osThreadCreate(osThread(mainTask), NULL);
 
+  /* definition and creation of SubTask */
+  osThreadDef(SubTask, StartSubTask, osPriorityIdle, 0, 1024);
+  SubTaskHandle = osThreadCreate(osThread(SubTask), NULL);
+
+  /* definition and creation of Communication */
+  osThreadDef(Communication, StartCommunicate, osPriorityIdle, 0, 1024);
+  CommunicationHandle = osThreadCreate(osThread(Communication), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -137,6 +149,42 @@ void StartMainTask(void const * argument)
     osDelay(1);
   }
   /* USER CODE END StartMainTask */
+}
+
+/* USER CODE BEGIN Header_StartSubTask */
+/**
+* @brief Function implementing the SubTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartSubTask */
+void StartSubTask(void const * argument)
+{
+  /* USER CODE BEGIN StartSubTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartSubTask */
+}
+
+/* USER CODE BEGIN Header_StartCommunicate */
+/**
+* @brief Function implementing the Communication thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartCommunicate */
+void StartCommunicate(void const * argument)
+{
+  /* USER CODE BEGIN StartCommunicate */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartCommunicate */
 }
 
 /* Private application code --------------------------------------------------*/

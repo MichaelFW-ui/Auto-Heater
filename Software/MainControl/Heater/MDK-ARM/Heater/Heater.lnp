@@ -22,6 +22,8 @@
 "heater\externalflash.o"
 "heater\fontlib.o"
 "heater\temp.o"
+"heater\ui.o"
+"heater\delay.o"
 "heater\stm32f4xx_hal_pcd.o"
 "heater\stm32f4xx_hal_pcd_ex.o"
 "heater\stm32f4xx_ll_usb.o"

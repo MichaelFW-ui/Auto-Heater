@@ -336,7 +336,7 @@
               <MiscControls />
               <Define>USE_HAL_DRIVER,STM32F401xC</Define>
               <Undefine />
-              <IncludePath>../Core/Inc;                                ../USB_DEVICE/App;                                ../USB_DEVICE/Target;                                ../Drivers/STM32F4xx_HAL_Driver/Inc;                                ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;                                ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;                                ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;                                ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;                                ../Drivers/CMSIS/Include;                                ..\User\Inc;                         ../Middlewares/Third_Party/FreeRTOS/Source/include;                         ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                         ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F</IncludePath>
+              <IncludePath>../Core/Inc;                                        ../USB_DEVICE/App;                                        ../USB_DEVICE/Target;                                        ../Drivers/STM32F4xx_HAL_Driver/Inc;                                        ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;                                        ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc;                                        ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc;                                        ../Drivers/CMSIS/Device/ST/STM32F4xx/Include;                                        ../Drivers/CMSIS/Include;                                        ..\User\Inc;                                 ../Middlewares/Third_Party/FreeRTOS/Source/include;                                 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS;                                 ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -772,6 +772,16 @@
               <FileName>temp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\User\Src\temp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ui.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Src\ui.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>delay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\User\Src\delay.cpp</FilePath>
             </File>
           </Files>
         </Group>

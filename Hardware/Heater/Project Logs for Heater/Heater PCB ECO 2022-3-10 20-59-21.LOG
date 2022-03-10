@@ -1,0 +1,4 @@
+Added Component: Designator=R25(0603 _R)
+Added Pin To Net: NetName=GND Pin=R25-1
+Added Pin To Net: NetName=EC11_SW Pin=R25-2
+Added Member To Class: ClassName=Heater Member=Component R25 10k¦¸

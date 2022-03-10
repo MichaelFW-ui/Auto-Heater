@@ -74,10 +74,12 @@ void Error_Handler(void);
 #define IPS_BLK_GPIO_Port GPIOB
 #define EC11_SW_Pin GPIO_PIN_12
 #define EC11_SW_GPIO_Port GPIOB
+#define EC11_SW_EXTI_IRQn EXTI15_10_IRQn
 #define EC11_A_Pin GPIO_PIN_13
 #define EC11_A_GPIO_Port GPIOB
 #define EC11_C_Pin GPIO_PIN_14
 #define EC11_C_GPIO_Port GPIOB
+#define EC11_C_EXTI_IRQn EXTI15_10_IRQn
 #define PWM_Heat_Pin GPIO_PIN_9
 #define PWM_Heat_GPIO_Port GPIOA
 #define Flash_Hold_Pin GPIO_PIN_15
