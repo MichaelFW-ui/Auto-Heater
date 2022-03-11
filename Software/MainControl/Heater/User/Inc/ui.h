@@ -31,11 +31,18 @@ struct Display {
   void DrawOperationPage(void);
   void DrawAboutPage(void);
   void DrawWelcomePage(void);
+  void DrawParamPage(void);
+  void DrawHelpPage(void);
+
   void DrawPointOnCurve(uint16_t time, float temp);
+  void DrawAxisOnPoint(uint8_t tie);
+
+  void ClearCurveArea(void);
 
   void PrintInformation(const char *fmt, int16_t out);
 
   void PrintInfoArg(const char *fmt, ...);
+  void PrintMultiLineArg(uint8_t pos, const char *fmt, ...);
 };
 
 extern Display displayLCD;

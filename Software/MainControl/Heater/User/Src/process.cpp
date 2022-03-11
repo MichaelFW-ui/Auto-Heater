@@ -21,6 +21,7 @@
 #include "fontlib.h"
 #include "ctrl.h"
 #include "adc.h"
+#include "statemachine.h"
 #include "ui.h"
 
 uint8_t get_data_flag;
@@ -35,8 +36,7 @@ uint8_t flag_sw_short = 0;
 uint8_t flag_sw_hold = 0;
 uint8_t flag_error = 0;
 
-enum state_machine {State_Normal = 0x00, State_ChangingParam = 0x01} State;
-enum Param_state {Param_Time= 0x00, Param_Temp} target_param;
+StateMachine sm;
 
 void Process_Main_Init(void) {
   /*TODO*/
@@ -54,29 +54,32 @@ void Process_Main_Run(void) {
   displayLCD.DrawWelcomePage();
   osDelay(1000);
   displayLCD.DrawOperationPage();
-  osDelay(1000);
   for(;;)
   {
     osDelay(1);
 
     if (flag_spin_ccw) {
       flag_spin_ccw = 0;
-      displayLCD.PrintInformation("Test:CCW occurred", 0);
+      StateMachine::State ret = sm.OnEvent(Event::Spin_CCW);
+      sm.state = ret;
     }
 
     if (flag_spin_cw) {
       flag_spin_cw = 0;
-      displayLCD.PrintInformation("Test:CW occurred", 0);
+      StateMachine::State ret = sm.OnEvent(Event::Spin_CW);
+      sm.state = ret;
     }
 
     if (flag_sw_hold) {
       flag_sw_hold = 0;
-      displayLCD.PrintInformation("Test:Hold occurred", 0);
+      StateMachine::State ret = sm.OnEvent(Event::SW_Hold);
+      sm.state = ret;
     }
 
     if (flag_sw_short) {
       flag_sw_short = 0;
-      displayLCD.PrintInformation("Test:Short occurred", 0);
+      StateMachine::State ret = sm.OnEvent(Event::SW_Short);
+      sm.state = ret;
     }
 
     if (flag_error) {

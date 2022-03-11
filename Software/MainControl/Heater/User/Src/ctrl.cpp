@@ -159,7 +159,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (EC11_SW_GPIO_Port->IDR & EC11_SW_Pin) {
       last_tick_sw = Delay_GetTick_us();
     } else {
-      if (Delay_GetTick_us() - last_tick_sw > 700000) {
+      if (Delay_GetTick_us() - last_tick_sw > 500000) {
         flag_sw_hold = 1;
       } else {
         flag_sw_short = 1;

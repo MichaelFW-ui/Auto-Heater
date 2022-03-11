@@ -50,12 +50,129 @@ void Display::DrawWelcomePage(void) {
   lcd->Print_String("MichaelFW Presents", 30, 67, 0x0fff, FontSize_1206);
 }
 
+void Display::DrawParamPage(void) {
+    lcd->Fill(0, 0, LCD_W, LCD_H, 0xFFFF);
+    PrintMultiLineArg(0, "You can display %d", 100);
+}
+
+void Display::DrawAboutPage(void) {
+    DrawParamPage();
+    PrintMultiLineArg(0, "This program originates");
+    PrintMultiLineArg(1, "from MichaelFW");
+    PrintMultiLineArg(2, "Currently in USTC");
+    PrintMultiLineArg(3, "For Education Only");
+}
+
+void Display::DrawHelpPage(void) {
+    DrawParamPage();
+    PrintMultiLineArg(0, "Turn the button to");
+    PrintMultiLineArg(1, "Obtain CW/CCW action");
+    PrintMultiLineArg(2, "Press for SHORT");
+    PrintMultiLineArg(3, "Hold 0.5s for HOLD");
+}
+
+void Display::PrintMultiLineArg(uint8_t pos, const char *fmt, ...) {
+    va_list arg;
+    va_start(arg, fmt);
+
+    char buffer[100];
+    vsprintf(buffer, fmt, arg);
+    va_end(arg);
+
+    int16_t x = 0, y = pos * 20;
+    lcd->Fill(x, y, x + LCD_W, y + 20, 0xFFFF);
+    lcd->Print_String(buffer, x + 10, y, 0x0000, FontSize_1206);
+}
+
 void Display::PrintInformation(const char *fmt, int16_t out) {
   lcd->Fill(0, 0, LCD_W, split_right.y, color_background);
   lcd->DrawLine(split_left.x, split_left.y, split_right.x, split_right.y,
                 color_split);
-  lcd->Print_String(fmt, 5, 3, color_status, FontSize_1206);
+  lcd->Print_String(fmt, 10, 3, color_status, FontSize_1206);
   if (out > 50) lcd->Fill(145, (1000 - out) / 50, 155, split_right.y - 1, 0xffff);
+}
+
+void Display::ClearCurveArea(void) {
+  lcd->Fill(0, split_left.y + 1, LCD_W, LCD_H, color_background);
+  lcd->DrawLine_WithDelay(origin.x, origin.y, y_end.x, y_end.y, color_axis, 0);
+  lcd->DrawLine_WithDelay(origin.x, origin.y, x_end.x, x_end.y, color_axis, 0);
+
+  lcd->DrawLine(y_end.x, y_end.y, y_end.x - 3, y_end.y + 3, color_axis);
+  lcd->DrawLine(y_end.x, y_end.y, y_end.x + 3, y_end.y + 3, color_axis);
+  lcd->DrawLine(x_end.x, x_end.y, x_end.x - 3, x_end.y - 3, color_axis);
+  lcd->DrawLine(x_end.x, x_end.y, x_end.x - 3, x_end.y + 3, color_axis);
+
+  lcd->Print_String("T/s", x_end.x - 10, x_end.y - 15, color_status,
+                    FontSize_1206);
+  lcd->Print_String("Temp", y_end.x + 6, y_end.y, color_status, FontSize_1206);
+
+
+  lcd->DrawLine_WithDelay(
+      origin.x,
+      origin.y -
+          curveControl.TargetTemperature[CurveControl::HeatingMode::IDLE] / 5,
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::HEATING] / 2,
+      origin.y -
+          curveControl.TargetTemperature[CurveControl::HeatingMode::HEATING] /
+              5,
+      color_heat_line, 0);
+
+  lcd->DrawLine_WithDelay(
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::HEATING] / 2,
+      origin.y -
+          curveControl.TargetTemperature[CurveControl::HeatingMode::HEATING] /
+              5,
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::PRESERVING] / 2,
+      origin.y -
+          curveControl
+                  .TargetTemperature[CurveControl::HeatingMode::PRESERVING] /
+              5,
+      color_heat_line, 0);
+
+  lcd->DrawLine_WithDelay(
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::PRESERVING] / 2,
+      origin.y -
+          curveControl
+                  .TargetTemperature[CurveControl::HeatingMode::PRESERVING] /
+              5,
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::WELDING_HEAT] / 2,
+      origin.y -
+          curveControl
+                  .TargetTemperature[CurveControl::HeatingMode::WELDING_HEAT] /
+              5,
+      color_heat_line, 0);
+
+  lcd->DrawLine_WithDelay(
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::WELDING_HEAT] / 2,
+      origin.y -
+          curveControl
+                  .TargetTemperature[CurveControl::HeatingMode::WELDING_HEAT] /
+              5,
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::WELDING] / 2,
+      origin.y -
+          curveControl.TargetTemperature[CurveControl::HeatingMode::WELDING] /
+              5,
+      color_heat_line, 0);
+
+  lcd->DrawLine_WithDelay(
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::WELDING] / 2,
+      origin.y -
+          curveControl.TargetTemperature[CurveControl::HeatingMode::WELDING] /
+              5,
+      origin.x +
+          curveControl.TargetTime[CurveControl::HeatingMode::COOLING] / 2,
+      origin.y -
+          curveControl.TargetTemperature[CurveControl::HeatingMode::COOLING] /
+              5,
+      color_heat_line, 0);
 }
 
 void Display::DrawOperationPage(void) {
@@ -167,10 +284,9 @@ void Display::DrawOperationPage(void) {
                 color_split);
   lcd->Print_String("Idle: waiting", 5, 3, color_status, FontSize_1206);
 }
-void Display::DrawAboutPage(void) {}
 
 void Display::DrawPointOnCurve(uint16_t time, float temp) {
-  int16_t x = origin.x + time / 3;
+  int16_t x = origin.x + time / 2;
   int16_t y = origin.y - temp / 5;
   lcd->DrawPoint(x, y, color_heat_line);
 }
@@ -188,4 +304,12 @@ void Display::PrintInfoArg(const char * fmt, ...) {
     lcd->Print_String(buffer, 5, 3, color_status, FontSize_1206);
 
     va_end(arg);
+}
+
+void Display::DrawAxisOnPoint(uint8_t tie) {
+    int16_t x = origin.x + curveControl.TargetTime[tie] / 2;
+    int16_t y = origin.y - curveControl.TargetTemperature[tie] / 5;
+
+    lcd->DrawLine(x - 3, y - 3, x + 3, y + 3, color_heat_line);
+    lcd->DrawLine(x - 3, y + 3, x + 3, y - 3, color_heat_line);
 }
