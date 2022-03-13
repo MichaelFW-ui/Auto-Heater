@@ -4,6 +4,7 @@
 "heater\gpio.o"
 "heater\freertos.o"
 "heater\adc.o"
+"heater\dma.o"
 "heater\rtc.o"
 "heater\spi.o"
 "heater\tim.o"
