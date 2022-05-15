@@ -1,0 +1,6 @@
+make.exe --dry-run --always-make --keep-going --print-directory
+make.exe: Entering directory 'd:/EmbeddedProjects/OnGoing/Heater/Software/MainControl/Heater/MDK-ARM'
+make.exe: Leaving directory 'd:/EmbeddedProjects/OnGoing/Heater/Software/MainControl/Heater/MDK-ARM'
+ 
+make.exe: *** No targets specified and no makefile found.  Stop.
+

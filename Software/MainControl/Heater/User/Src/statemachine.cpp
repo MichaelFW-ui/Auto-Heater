@@ -98,10 +98,25 @@ StateMachine::State StateMachine::Normal_OnEvent(Event event) {
     return ret;
 }
 StateMachine::State StateMachine::HeatConfirm_OnEvent(Event event) {
-    return Normal;
+    StateMachine::State ret = HeatConfirm;
+    if (event == SW_Hold) {
+        ret  = Heating;
+        Heating_OnInitialize();
+    }
+    if (event == SW_Short) {
+        ret = Normal;
+        Normal_OnInitialize();
+    }
+    return ret;
 }
 StateMachine::State StateMachine::Heating_OnEvent(Event event) {
-    return Normal;
+    StateMachine::State ret = Heating;
+    if (event == SW_Short) {
+        ret = Normal;
+        Normal_OnInitialize();
+        curveControl.HaltHeat();
+    }
+    return Heating;
 }
 StateMachine::State StateMachine::Change_ChooseParam_OnEvent(Event event) {
     const char * msg[] = {"Change time?", "Change temperature?"};
@@ -286,14 +301,15 @@ void StateMachine::Normal_OnInitialize(void) {
     displayLCD.ClearCurveArea();
 }
 void StateMachine::HeatConfirm_OnInitialize(void) {
-    // const char * msg = "Ready to HEAT?";
-    // displayLCD.PrintInformation(msg, 0);
-    const char * msg = "NOT AVAILABLE";
+    const char * msg = "Ready to HEAT?";
     displayLCD.PrintInformation(msg, 0);
+    // const char * msg = "NOT AVAILABLE";
+    // displayLCD.PrintInformation(msg, 0);
 }
 void StateMachine::Heating_OnInitialize(void) {
-    const char * msg = "NOT AVAILABLE";
-    displayLCD.PrintInformation(msg, 0);
+    // const char * msg = "NOT AVAILABLE";
+    // displayLCD.PrintInformation(msg, 0);
+    curveControl.BeginHeating();
 }
 void StateMachine::Change_ChooseParam_OnInitialize(void) {
     const char * msg = "Change time?";

@@ -43,6 +43,7 @@ extern uint32_t ADC_Converted[2];
 
 void Process_Main_Init(void) {
   /*TODO*/
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_Converted,  2);
   LCD_Init(&hLCD);
   FontLib_Init(&fontLib);
   CurveControl_Init(&curveControl);
@@ -56,19 +57,19 @@ void Process_Main_Run(void) {
   displayLCD.DrawWelcomePage();
   osDelay(1000);
   displayLCD.DrawOperationPage();
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_Converted,  2);
   for(;;)
   {
     osDelay(10);
+		// usb_printf("Test\r\n");
     uint16_t raw1 = ADC_Converted[0];
     uint16_t raw2 = ADC_Converted[1];
     float VCC = 3.2;
     float v1 = (float) raw1 * VCC / 4096;
     float v2 = (float) raw2 * VCC / 4096;
 
-    float temp = GetTemperature();
-    displayLCD.PrintInfoArg("T: %d,%d",ADC_Converted[0], ADC_Converted[1]);
-    continue;
+    // float temp = GetTemperature();
+    // displayLCD.PrintInfoArg("T: %d,%d,%f",ADC_Converted[0], ADC_Converted[1], temp);
+    // continue;
 
     if (flag_spin_ccw) {
       flag_spin_ccw = 0;

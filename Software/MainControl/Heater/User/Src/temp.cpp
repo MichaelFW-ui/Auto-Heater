@@ -22,13 +22,13 @@ float GetTemperature(void) {
 
 
     float R9 = 1300000;
-    float VCC = 3.2;
+    float VCC = 3.24;
     float v1 = (float) raw1 * VCC / 4096;
     float v2 = (float) raw2 * VCC / 4096;
 
     float R_NTC;
 
-    if (v1 > 0.1)
+    if (v1 > 0.2)
         R_NTC = v1 * R9 / (VCC - v1);
     else
         R_NTC = v2 / 20 * R9 / (VCC - v2 / 20);

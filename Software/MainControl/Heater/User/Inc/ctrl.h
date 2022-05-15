@@ -39,6 +39,8 @@ struct CurveControl {
 
     void OnHeatingOperation(void);
     void BeginHeating(void);
+
+    void HaltHeat(void);
 };
 
 extern CurveControl curveControl;

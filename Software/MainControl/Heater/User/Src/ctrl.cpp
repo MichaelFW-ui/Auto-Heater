@@ -25,6 +25,10 @@ extern uint8_t flag_sw_hold;
 extern uint8_t flag_error;
 
 
+void CurveControl::HaltHeat(void) {
+  OperatingStatus = HeatingMode::IDLE;
+  __HAL_TIM_SetCompare(this->tim, this->Channel, (uint16_t)0);
+}
 
 void CurveControl_Init(CurveControl *handle) {
     handle->tim = &htim1;
@@ -32,6 +36,7 @@ void CurveControl_Init(CurveControl *handle) {
     HAL_TIM_Base_Start(handle->tim);
     __HAL_TIM_SetCompare(handle->tim, handle->Channel, 0);
     HAL_TIM_PWM_Start(handle->tim, handle->Channel);
+    __HAL_TIM_SetCompare(handle->tim, handle->Channel, 0);
     handle->OperatingStatus = CurveControl::HeatingMode::IDLE;
     handle->CurrentTemperature = GetTemperature();/*  TODO  */
     handle->TargetTemperature[CurveControl::HeatingMode::IDLE] = GetTemperature();
@@ -44,15 +49,15 @@ void CurveControl_Init(CurveControl *handle) {
     handle->TargetTime[CurveControl::HeatingMode::IDLE] = 0;
     handle->TargetTime[CurveControl::HeatingMode::HEATING] = 90;
     handle->TargetTime[CurveControl::HeatingMode::PRESERVING] = 90 + 80;
-    handle->TargetTime[CurveControl::HeatingMode::WELDING_HEAT] = 90 + 80 + 30;
-    handle->TargetTime[CurveControl::HeatingMode::WELDING] = 90 + 80 + 30 + 30;
-    handle->TargetTime[CurveControl::HeatingMode::COOLING] = 90 + 80 + 30 + 30 + 70;
+    handle->TargetTime[CurveControl::HeatingMode::WELDING_HEAT] = 90 + 80 + 40;
+    handle->TargetTime[CurveControl::HeatingMode::WELDING] = 90 + 80 + 40 + 30;
+    handle->TargetTime[CurveControl::HeatingMode::COOLING] = 90 + 80 + 40 + 30 + 70;
 
     displayLCD.lcd = &hLCD;
 
-    handle->pid.Ki = 0;
-    handle->pid.Kp = 0;
-    handle->pid.Kd = 0;
+    handle->pid.Ki = 1;
+    handle->pid.Kp = 25;
+    handle->pid.Kd = 1;
     handle->pid.I_Term_Max = 0;
     handle->pid.Out_Max = 1000;
     
@@ -78,7 +83,7 @@ void CurveControl::OnHeatingOperation(void) {
     return;
   }
   ++TimeSinceBeginning;
-  if (TimeSinceBeginning == TargetTime[OperatingStatus]) {
+  if (TimeSinceBeginning > TargetTime[OperatingStatus]) {
     switch (OperatingStatus) {
       case HeatingMode::HEATING:
         OperatingStatus = HeatingMode::PRESERVING;
@@ -102,12 +107,13 @@ void CurveControl::OnHeatingOperation(void) {
   }
   uint8_t status = OperatingStatus;
   CurrentTemperature = GetTemperature();
-  TargetTemp =
+  TargetTemp = TargetTemperature[status - 1] + 
       (TargetTemperature[status] - TargetTemperature[status - 1]) /
       (TargetTime[status] - TargetTime[status - 1]) *
       (TimeSinceBeginning - TargetTime[status - 1]);
   
   pid.UpdateCurrent(CurrentTemperature);
+	pid.Target = TargetTemp;
   
   int16_t out = (int16_t)(pid.Compute());
   if (out < 0) out = 0;

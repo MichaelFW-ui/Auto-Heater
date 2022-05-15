@@ -1,0 +1,9 @@
+Removed Pin From Net: NetName=ADC1 Pin=U1-11
+Added Component: Designator=R26(0603 _R)
+Added Pin To Net: NetName=ADC1 Pin=R26-1
+Change Net Name : Old Net Name=ADC1 New Net Name=NetD4_1
+Added Pin To Net: NetName=ADC1 Pin=R26-2
+Added Pin To Net: NetName=ADC1 Pin=U1-11
+Added Net: Name=ADC1
+Added Member To Class: ClassName=Heater Member=Component H1 Hole
+Added Member To Class: ClassName=Heater Member=Component R26 1k¦¸

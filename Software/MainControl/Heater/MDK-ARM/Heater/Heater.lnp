@@ -1,11 +1,10 @@
---cpu=Cortex-M4.fp
+--cpu=Cortex-M4.fp.sp
 "heater\startup_stm32f401xc.o"
 "heater\main.o"
 "heater\gpio.o"
 "heater\freertos.o"
 "heater\adc.o"
 "heater\dma.o"
-"heater\rtc.o"
 "heater\spi.o"
 "heater\tim.o"
 "heater\usart.o"
@@ -45,8 +44,6 @@
 "heater\stm32f4xx_hal_adc.o"
 "heater\stm32f4xx_hal_adc_ex.o"
 "heater\stm32f4xx_ll_adc.o"
-"heater\stm32f4xx_hal_rtc.o"
-"heater\stm32f4xx_hal_rtc_ex.o"
 "heater\stm32f4xx_hal_spi.o"
 "heater\stm32f4xx_hal_tim.o"
 "heater\stm32f4xx_hal_tim_ex.o"
